@@ -1,0 +1,2886 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#09070d">
+
+<title>Realm of Shadows — D&D</title>
+
+<style>
+:root{
+    --bg:#09070d;
+    --panel:#11101a;
+    --panel2:#171522;
+    --panel3:#201b2c;
+    --gold:#d6a84c;
+    --gold2:#f0c96a;
+    --purple:#7650a2;
+    --purple2:#9a6ed0;
+    --red:#b94444;
+    --green:#3d9b68;
+    --blue:#3975b7;
+    --text:#eeeaf5;
+    --muted:#9791a4;
+    --border:#342b42;
+    --danger:#8d3232;
+    --shadow:0 12px 40px rgba(0,0,0,.4);
+}
+
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    width:100%;
+    height:100%;
+    background:
+        radial-gradient(circle at 50% -20%,#302344 0,#100c16 45%,#09070d 100%);
+    color:var(--text);
+    font-family:Georgia,"Times New Roman",serif;
+}
+
+button,input,textarea,select{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.app{
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+}
+
+header{
+    height:68px;
+    min-height:68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 18px;
+    background:rgba(10,8,14,.94);
+    border-bottom:1px solid var(--border);
+    box-shadow:0 4px 25px rgba(0,0,0,.3);
+    position:sticky;
+    top:0;
+    z-index:20;
+}
+
+.logo{
+    color:var(--gold2);
+    font-weight:bold;
+    letter-spacing:1px;
+    font-size:20px;
+}
+
+.logo span{
+    color:#aaa2b6;
+    font-size:12px;
+    display:block;
+    letter-spacing:3px;
+}
+
+.header-actions{
+    display:flex;
+    gap:7px;
+}
+
+.btn{
+    background:var(--panel3);
+    color:white;
+    border:1px solid #493b5c;
+    border-radius:7px;
+    padding:9px 12px;
+    transition:.18s;
+}
+
+.btn:hover{
+    background:#302541;
+    transform:translateY(-1px);
+}
+
+.btn.gold{
+    background:#74531e;
+    border-color:#a37b32;
+}
+
+.btn.gold:hover{
+    background:#906b29;
+}
+
+.btn.danger{
+    background:#642b31;
+    border-color:#914149;
+}
+
+.btn.green{
+    background:#245d42;
+    border-color:#367d5a;
+}
+
+.btn.blue{
+    background:#274e79;
+    border-color:#396e9e;
+}
+
+.layout{
+    flex:1;
+    display:grid;
+    grid-template-columns:270px minmax(450px,1fr) 290px;
+    min-height:calc(100vh - 68px);
+}
+
+.sidebar{
+    background:rgba(12,10,17,.92);
+    padding:16px;
+    overflow-y:auto;
+}
+
+.sidebar.left{
+    border-right:1px solid var(--border);
+}
+
+.sidebar.right{
+    border-left:1px solid var(--border);
+}
+
+.panel{
+    background:linear-gradient(145deg,rgba(31,26,43,.92),rgba(16,13,23,.92));
+    border:1px solid var(--border);
+    border-radius:10px;
+    padding:13px;
+    margin-bottom:13px;
+    box-shadow:var(--shadow);
+}
+
+.panel-title{
+    margin:0 0 11px;
+    color:var(--gold2);
+    font-size:15px;
+    border-bottom:1px solid var(--border);
+    padding-bottom:8px;
+}
+
+.hero{
+    text-align:center;
+}
+
+.avatar{
+    width:78px;
+    height:78px;
+    border-radius:50%;
+    margin:3px auto 9px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:38px;
+    background:
+        radial-gradient(circle,#5e417d,#191224);
+    border:2px solid var(--gold);
+    box-shadow:0 0 25px rgba(214,168,76,.15);
+}
+
+.hero h2{
+    margin:4px 0;
+}
+
+.muted{
+    color:var(--muted);
+}
+
+.level{
+    color:var(--gold);
+    font-size:13px;
+}
+
+.bar{
+    width:100%;
+    height:9px;
+    background:#09080d;
+    border:1px solid #292330;
+    border-radius:20px;
+    overflow:hidden;
+}
+
+.bar > div{
+    height:100%;
+    transition:.3s;
+}
+
+.hpbar{
+    background:linear-gradient(90deg,#852f36,#d25b5b);
+}
+
+.xpbar{
+    background:linear-gradient(90deg,#315f9d,#5797d5);
+}
+
+.statrow{
+    margin:10px 0;
+}
+
+.statline{
+    display:flex;
+    justify-content:space-between;
+    font-size:13px;
+    margin-bottom:4px;
+}
+
+.stats-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:6px;
+}
+
+.stat-box{
+    background:#15111d;
+    border:1px solid #2c2436;
+    border-radius:7px;
+    padding:8px;
+    text-align:center;
+}
+
+.stat-box strong{
+    display:block;
+    color:var(--gold2);
+    font-size:18px;
+}
+
+.stat-box small{
+    color:var(--muted);
+}
+
+.main{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+}
+
+.story{
+    flex:1;
+    overflow-y:auto;
+    padding:25px;
+    scroll-behavior:smooth;
+}
+
+.message{
+    max-width:900px;
+    margin:0 auto 15px;
+    padding:15px 17px;
+    border-radius:10px;
+    line-height:1.65;
+    animation:appear .2s ease;
+}
+
+@keyframes appear{
+    from{opacity:0;transform:translateY(5px)}
+    to{opacity:1;transform:none}
+}
+
+.message.dm{
+    background:linear-gradient(135deg,#21182b,#15111d);
+    border-left:4px solid var(--gold);
+}
+
+.message.player{
+    background:linear-gradient(135deg,#252033,#181421);
+    border-left:4px solid var(--purple2);
+}
+
+.message.system{
+    background:#121018;
+    border:1px dashed #393143;
+    color:#aaa3b3;
+    text-align:center;
+    font-size:13px;
+}
+
+.message.combat{
+    background:linear-gradient(135deg,#32191e,#171018);
+    border-left:4px solid var(--red);
+}
+
+.message-title{
+    color:var(--gold2);
+    font-weight:bold;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+.typing{
+    color:var(--muted);
+    font-style:italic;
+}
+
+.composer{
+    background:#0e0b13;
+    border-top:1px solid var(--border);
+    padding:11px 16px;
+}
+
+.quick{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding-bottom:8px;
+}
+
+.quick .btn{
+    white-space:nowrap;
+    font-size:12px;
+}
+
+.compose-row{
+    display:flex;
+    gap:8px;
+}
+
+textarea{
+    flex:1;
+    min-height:54px;
+    max-height:150px;
+    resize:vertical;
+    color:white;
+    background:#17131e;
+    border:1px solid #3b3048;
+    border-radius:8px;
+    padding:11px;
+    outline:none;
+}
+
+textarea:focus{
+    border-color:var(--purple2);
+    box-shadow:0 0 0 2px rgba(154,110,208,.1);
+}
+
+.inventory{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+}
+
+.item{
+    padding:8px;
+    border-radius:6px;
+    background:#15111c;
+    border:1px solid #2b2435;
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+}
+
+.item button{
+    background:none;
+    border:none;
+    color:var(--gold2);
+}
+
+.quest{
+    border-left:3px solid var(--gold);
+    padding:7px 8px;
+    background:#15111d;
+    margin-bottom:7px;
+    border-radius:5px;
+    font-size:12px;
+}
+
+.quest.done{
+    border-left-color:var(--green);
+    opacity:.65;
+}
+
+.dice{
+    text-align:center;
+}
+
+.dice-result{
+    font-size:48px;
+    color:var(--gold2);
+    font-weight:bold;
+    min-height:58px;
+}
+
+.dice-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:5px;
+}
+
+.dice-buttons button{
+    background:#21192c;
+    color:white;
+    border:1px solid #493b5b;
+    border-radius:5px;
+    padding:7px 2px;
+}
+
+.combat-panel{
+    display:none;
+    background:#160d12;
+    border-top:1px solid #552c32;
+    padding:10px 15px;
+}
+
+.combat-panel.active{
+    display:block;
+}
+
+.enemy{
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+
+.enemy-avatar{
+    width:55px;
+    height:55px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:9px;
+    background:#321820;
+    font-size:28px;
+    border:1px solid #703741;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:100;
+    background:rgba(0,0,0,.78);
+    align-items:center;
+    justify-content:center;
+    padding:15px;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    width:min(700px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#15111d;
+    border:1px solid #584467;
+    border-radius:13px;
+    box-shadow:0 20px 70px #000;
+    padding:20px;
+}
+
+.modal-box h2{
+    margin-top:0;
+    color:var(--gold2);
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+label{
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin-bottom:5px;
+}
+
+input,select{
+    width:100%;
+    background:#211a29;
+    color:white;
+    border:1px solid #40334d;
+    border-radius:7px;
+    padding:10px;
+    outline:none;
+}
+
+input:focus,select:focus{
+    border-color:var(--purple2);
+}
+
+.modal-actions{
+    display:flex;
+    gap:8px;
+    justify-content:flex-end;
+    margin-top:15px;
+}
+
+.tabs{
+    display:flex;
+    gap:5px;
+    margin-bottom:12px;
+    flex-wrap:wrap;
+}
+
+.tab{
+    padding:8px 10px;
+    background:#201929;
+    border:1px solid #3d304a;
+    color:#bbb3c5;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:#654987;
+    color:white;
+}
+
+.book-page{
+    line-height:1.75;
+}
+
+.book-page h3{
+    color:var(--gold2);
+}
+
+kbd{
+    background:#29222f;
+    border:1px solid #473b51;
+    padding:2px 5px;
+    border-radius:4px;
+    font-size:11px;
+}
+
+.toast{
+    position:fixed;
+    right:18px;
+    bottom:18px;
+    background:#20182a;
+    border:1px solid #594568;
+    color:white;
+    padding:11px 15px;
+    border-radius:8px;
+    box-shadow:var(--shadow);
+    opacity:0;
+    transform:translateY(15px);
+    pointer-events:none;
+    transition:.25s;
+    z-index:200;
+}
+
+.toast.show{
+    opacity:1;
+    transform:none;
+}
+
+@media(max-width:1050px){
+    .layout{
+        grid-template-columns:230px minmax(400px,1fr);
+    }
+
+    .sidebar.right{
+        display:none;
+    }
+}
+
+@media(max-width:700px){
+    header{
+        height:auto;
+        min-height:62px;
+        gap:7px;
+        padding:8px;
+    }
+
+    .logo{
+        font-size:14px;
+    }
+
+    .logo span{
+        display:none;
+    }
+
+    .header-actions .btn{
+        font-size:10px;
+        padding:7px;
+    }
+
+    .layout{
+        display:block;
+        min-height:calc(100vh - 62px);
+    }
+
+    .sidebar.left{
+        display:none;
+    }
+
+    .story{
+        padding:12px;
+    }
+
+    .message{
+        padding:12px;
+        font-size:14px;
+    }
+
+    .compose-row{
+        flex-direction:column;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header>
+    <div class="logo">
+        ⚔️ REALM OF SHADOWS
+        <span>SOLO FANTASY RPG</span>
+    </div>
+
+    <div class="header-actions">
+        <button class="btn" onclick="openCharacter()">🧙</button>
+        <button class="btn" onclick="openBook()">📖 Kurallar</button>
+        <button class="btn" onclick="exportSave()">⬇️</button>
+        <button class="btn" onclick="importSave()">⬆️</button>
+        <button class="btn gold" onclick="newGame()">⚔️ Yeni</button>
+    </div>
+</header>
+
+<div class="layout">
+
+<!-- LEFT -->
+
+<aside class="sidebar left">
+
+    <div class="panel hero">
+
+        <div class="avatar" id="avatar">🧙</div>
+
+        <h2 id="characterName">Arden</h2>
+
+        <div class="level">
+            Seviye <span id="level">1</span>
+            •
+            <span id="className">Savaşçı</span>
+        </div>
+
+        <br>
+
+        <div class="statrow">
+            <div class="statline">
+                <span>❤️ Can</span>
+                <b id="hpText">20 / 20</b>
+            </div>
+
+            <div class="bar">
+                <div class="hpbar" id="hpBar" style="width:100%"></div>
+            </div>
+        </div>
+
+        <div class="statrow">
+            <div class="statline">
+                <span>✨ Deneyim</span>
+                <b id="xpText">0 / 100</b>
+            </div>
+
+            <div class="bar">
+                <div class="xpbar" id="xpBar" style="width:0%"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3 class="panel-title">⚔️ Savaş Değerleri</h3>
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+                <strong id="ac">14</strong>
+                <small>AC</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="attack">+5</strong>
+                <small>Saldırı</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="damage">1d8+3</strong>
+                <small>Hasar</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="gold">25</strong>
+                <small>Altın</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3 class="panel-title">📊 Özellikler</h3>
+
+        <div class="stats-grid">
+
+            <div class="stat-box">
+                <strong id="str">16</strong>
+                <small>STR</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="dex">12</strong>
+                <small>DEX</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="con">15</strong>
+                <small>CON</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="int">10</strong>
+                <small>INT</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="wis">11</strong>
+                <small>WIS</small>
+            </div>
+
+            <div class="stat-box">
+                <strong id="cha">10</strong>
+                <small>CHA</small>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3 class="panel-title">🗺️ Konum</h3>
+
+        <div id="location">
+            Blackmoor Köyü
+        </div>
+
+        <small class="muted" id="weather">
+            Yağmurlu gece
+        </small>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main class="main">
+
+    <div class="story" id="story"></div>
+
+    <div class="combat-panel" id="combatPanel">
+
+        <div class="enemy">
+
+            <div class="enemy-avatar" id="enemyAvatar">
+                👹
+            </div>
+
+            <div style="flex:1">
+
+                <b id="enemyName">
+                    Goblin
+                </b>
+
+                <div class="bar" style="margin-top:7px">
+                    <div
+                        class="hpbar"
+                        id="enemyHpBar"
+                        style="width:100%"
+                    ></div>
+                </div>
+
+                <small id="enemyHpText">
+                    8 / 8
+                </small>
+
+            </div>
+
+            <button class="btn danger" onclick="attackEnemy()">
+                ⚔️ Saldır
+            </button>
+
+            <button class="btn green" onclick="usePotion()">
+                🧪 İksir
+            </button>
+
+            <button class="btn" onclick="fleeCombat()">
+                🏃 Kaç
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="composer">
+
+        <div class="quick">
+
+            <button class="btn" onclick="quick('Etrafı dikkatlice inceliyorum.')">
+                👁️ İncele
+            </button>
+
+            <button class="btn" onclick="quick('Sessizce ilerliyorum.')">
+                🤫 Sessiz ilerle
+            </button>
+
+            <button class="btn" onclick="quick('İnsanlarla konuşmaya çalışıyorum.')">
+                🗣️ Konuş
+            </button>
+
+            <button class="btn" onclick="quick('Tehlikeye karşı savunma pozisyonu alıyorum.')">
+                🛡️ Savun
+            </button>
+
+            <button class="btn" onclick="startCombat()">
+                ⚔️ Savaş başlat
+            </button>
+
+        </div>
+
+        <div class="compose-row">
+
+            <textarea
+                id="input"
+                placeholder="Karakterin ne yapıyor? Örn: 'Kuyunun içine bakıp sesin nereden geldiğini anlamaya çalışıyorum.'"
+            ></textarea>
+
+            <button class="btn gold" onclick="sendAction()">
+                Gönder ⚔️
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<!-- RIGHT -->
+
+<aside class="sidebar right">
+
+    <div class="panel">
+
+        <h3 class="panel-title">🎒 Envanter</h3>
+
+        <div class="inventory" id="inventory"></div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3 class="panel-title">📜 Görevler</h3>
+
+        <div id="quests"></div>
+
+    </div>
+
+    <div class="panel dice">
+
+        <h3 class="panel-title">🎲 Zar</h3>
+
+        <div class="dice-result" id="diceResult">
+            -
+        </div>
+
+        <div class="dice-buttons">
+
+            <button onclick="roll(4)">D4</button>
+            <button onclick="roll(6)">D6</button>
+            <button onclick="roll(8)">D8</button>
+            <button onclick="roll(10)">D10</button>
+            <button onclick="roll(12)">D12</button>
+            <button onclick="roll(20)">D20</button>
+            <button onclick="roll(100)">D100</button>
+            <button onclick="abilityCheck()">CHECK</button>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3 class="panel-title">⌨️ Kısayollar</h3>
+
+        <small class="muted">
+            <b>Enter</b> — Eylem gönder<br>
+            <b>Ctrl + S</b> — Kaydet<br>
+            <b>R</b> — D20<br>
+            <b>Esc</b> — Pencereyi kapat
+        </small>
+
+    </div>
+
+</aside>
+
+</div>
+</div>
+
+
+<!-- CHARACTER MODAL -->
+
+<div class="modal" id="characterModal">
+
+<div class="modal-box">
+
+<h2>🧙 Kahramanını Yarat</h2>
+
+<div class="form-grid">
+
+<div>
+<label>Karakter adı</label>
+<input id="nameInput" value="Arden">
+</div>
+
+<div>
+<label>Sınıf</label>
+
+<select id="classInput">
+
+<option value="Savaşçı">⚔️ Savaşçı</option>
+<option value="Büyücü">🔮 Büyücü</option>
+<option value="Hırsız">🗡️ Hırsız</option>
+<option value="Paladin">🛡️ Paladin</option>
+<option value="Korucu">🏹 Korucu</option>
+
+</select>
+
+</div>
+
+<div>
+<label>Irk</label>
+
+<select id="raceInput">
+
+<option>İnsan</option>
+<option>Elf</option>
+<option>Cüce</option>
+<option>Buçukluk</option>
+<option>Yarı-Ork</option>
+</select>
+
+</div>
+
+<div>
+<label>Geçmiş</label>
+
+<select id="backgroundInput">
+
+<option>Gezgin</option>
+<option>Asker</option>
+<option>Suçlu</option>
+<option>Bilgin</option>
+<option>Asil</option>
+</select>
+
+</div>
+
+</div>
+
+<div class="modal-actions">
+
+<button class="btn" onclick="closeCharacter()">
+İptal
+</button>
+
+<button class="btn gold" onclick="createCharacter()">
+Karakteri Kaydet
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- BOOK MODAL -->
+
+<div class="modal" id="bookModal">
+
+<div class="modal-box">
+
+<div class="tabs">
+
+<button class="tab active" onclick="bookTab('how')">
+Nasıl Oynanır?
+</button>
+
+<button class="tab" onclick="bookTab('rules')">
+Kurallar
+</button>
+
+<button class="tab" onclick="bookTab('combat')">
+Savaş
+</button>
+
+<button class="tab" onclick="bookTab('stats')">
+Özellikler
+</button>
+
+</div>
+
+<div id="bookContent" class="book-page"></div>
+
+<div class="modal-actions">
+
+<button class="btn" onclick="closeBook()">
+Kapat
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+
+<script>
+
+/* =========================================================
+   REALM OF SHADOWS
+   SOLO RPG ENGINE
+========================================================= */
+
+const DEFAULT_GAME = {
+
+    version: 1,
+
+    character:{
+        name:"Arden",
+        race:"İnsan",
+        className:"Savaşçı",
+        background:"Gezgin",
+
+        level:1,
+        xp:0,
+
+        hp:20,
+        maxHp:20,
+
+        ac:14,
+
+        str:16,
+        dex:12,
+        con:15,
+        int:10,
+        wis:11,
+        cha:10,
+
+        gold:25
+    },
+
+    inventory:[
+        {
+            id:"sword",
+            name:"Paslı Kılıç",
+            icon:"🗡️",
+            type:"weapon",
+            damage:"1d8+3",
+            quantity:1
+        },
+        {
+            id:"shield",
+            name:"Tahta Kalkan",
+            icon:"🛡️",
+            type:"armor",
+            quantity:1
+        },
+        {
+            id:"potion",
+            name:"Şifa İksiri",
+            icon:"🧪",
+            type:"consumable",
+            quantity:2,
+            heal:8
+        },
+        {
+            id:"torch",
+            name:"Meşale",
+            icon:"🔥",
+            type:"misc",
+            quantity:3
+        }
+    ],
+
+    quests:[
+        {
+            id:"blackmoor",
+            title:"Blackmoor'un Fısıltısı",
+            description:"Köy kuyusundan gelen gizemli sesi araştır.",
+            reward:100,
+            done:false
+        },
+        {
+            id:"church",
+            title:"Kapalı Kilise",
+            description:"Terk edilmiş kilisenin sırrını çöz.",
+            reward:75,
+            done:false
+        }
+    ],
+
+    location:"Blackmoor Köyü",
+
+    weather:"Yağmurlu gece",
+
+    flags:{
+        intro:true,
+        church:false,
+        well:false,
+        dagger:false
+    },
+
+    combat:null,
+
+    journal:[]
+
+};
+
+
+let game = structuredClone(DEFAULT_GAME);
+
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function clone(obj){
+    return JSON.parse(JSON.stringify(obj));
+}
+
+function save(){
+
+    localStorage.setItem(
+        "realmOfShadowsSave",
+        JSON.stringify(game)
+    );
+
+    toast("💾 Oyun kaydedildi.");
+
+}
+
+function load(){
+
+    const saved =
+        localStorage.getItem("realmOfShadowsSave");
+
+    if(saved){
+
+        try{
+
+            game = JSON.parse(saved);
+
+        }catch(e){
+
+            game = clone(DEFAULT_GAME);
+
+        }
+
+    }
+
+}
+
+function toast(text){
+
+    const el =
+        document.getElementById("toast");
+
+    el.textContent = text;
+
+    el.classList.add("show");
+
+    setTimeout(()=>{
+        el.classList.remove("show");
+    },1800);
+
+}
+
+
+/* =========================================================
+   DICE
+========================================================= */
+
+function randomInt(max){
+
+    return Math.floor(Math.random()*max)+1;
+
+}
+
+function roll(sides){
+
+    const result =
+        randomInt(sides);
+
+    document.getElementById("diceResult")
+        .textContent = result;
+
+    addMessage(
+        `🎲 D${sides} sonucu: <b>${result}</b>`,
+        "player"
+    );
+
+    if(sides === 20){
+
+        if(result === 20){
+
+            addMessage(
+                "🌟 <b>KRİTİK BAŞARI!</b> Kader senin tarafında.",
+                "dm"
+            );
+
+        }else if(result === 1){
+
+            addMessage(
+                "💀 <b>KRİTİK BAŞARISIZLIK!</b> Zar bugün sana düşman.",
+                "dm"
+            );
+
+        }
+
+    }
+
+    return result;
+}
+
+
+/* =========================================================
+   ABILITY CHECK
+========================================================= */
+
+function modifier(score){
+
+    return Math.floor((score-10)/2);
+
+}
+
+function abilityCheck(){
+
+    const abilities = [
+        ["Güç","str"],
+        ["Çeviklik","dex"],
+        ["Dayanıklılık","con"],
+        ["Zeka","int"],
+        ["Bilgelik","wis"],
+        ["Karizma","cha"]
+    ];
+
+    const choice =
+        prompt(
+            "Hangi özellik?\n\n"+
+            abilities.map((a,i)=>
+                `${i+1}. ${a[0]}`
+            ).join("\n")
+        );
+
+    const index =
+        Number(choice)-1;
+
+    if(!abilities[index]) return;
+
+    const [name,key] =
+        abilities[index];
+
+    const d20 =
+        randomInt(20);
+
+    const mod =
+        modifier(game.character[key]);
+
+    const total =
+        d20 + mod;
+
+    addMessage(
+        `🎲 <b>${name} kontrolü:</b> D20 ${d20} ${mod>=0?"+":""}${mod} = <b>${total}</b>`,
+        "player"
+    );
+
+    if(d20 === 20){
+
+        addMessage(
+            "🌟 Kritik başarı!",
+            "dm"
+        );
+
+    }else if(d20 === 1){
+
+        addMessage(
+            "💀 Kritik başarısızlık!",
+            "dm"
+        );
+
+    }else if(total >= 15){
+
+        addMessage(
+            "⚔️ Başarılı! Hamlen işe yarıyor.",
+            "dm"
+        );
+
+    }else if(total >= 10){
+
+        addMessage(
+            "⚠️ Kısmi başarı. Bir bedeli var.",
+            "dm"
+        );
+
+    }else{
+
+        addMessage(
+            "❌ Başarısız oldun.",
+            "dm"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   STORY
+========================================================= */
+
+function addMessage(text,type="dm"){
+
+    const story =
+        document.getElementById("story");
+
+    const message =
+        document.createElement("div");
+
+    message.className =
+        `message ${type}`;
+
+    let title =
+        type === "player"
+        ? `🧙 ${game.character.name}`
+        : type === "combat"
+        ? "⚔️ SAVAŞ"
+        : type === "system"
+        ? "📜 SİSTEM"
+        : "🎲 DUNGEON MASTER";
+
+    message.innerHTML =
+        `<div class="message-title">${title}</div>
+         ${text}`;
+
+    story.appendChild(message);
+
+    story.scrollTop =
+        story.scrollHeight;
+
+    game.journal.push({
+        type,
+        text,
+        time:new Date().toISOString()
+    });
+
+    saveSilent();
+
+}
+
+function saveSilent(){
+
+    localStorage.setItem(
+        "realmOfShadowsSave",
+        JSON.stringify(game)
+    );
+
+}
+
+
+/* =========================================================
+   PROCEDURAL DM
+========================================================= */
+
+function dmResponse(action){
+
+    const text =
+        action.toLowerCase();
+
+    if(
+        text.includes("kuyu") ||
+        text.includes("dinle") ||
+        text.includes("aşağı")
+    ){
+
+        game.flags.well = true;
+
+        addMessage(
+            "Kuyunun kenarına eğiliyorsun. Aşağıdan gelen fısıltı artık daha net: <i>“Beni bul...”</i>.",
+            "dm"
+        );
+
+        addMessage(
+            "Taşların arasında eski bir sembol görüyorsun. Bu sıradan bir kuyu değil.",
+            "dm"
+        );
+
+        return;
+    }
+
+    if(
+        text.includes("kilise") ||
+        text.includes("kapı")
+    ){
+
+        game.flags.church = true;
+
+        addMessage(
+            "Kilisenin ağır kapısını itiyorsun. İçeride yalnızca birkaç mum yanıyor.",
+            "dm"
+        );
+
+        addMessage(
+            "Sunakta siyah bir taş duruyor. Taşın üzerinde aynı sembol var.",
+            "dm"
+        );
+
+        return;
+    }
+
+    if(
+        text.includes("hançer") ||
+        text.includes("bıçak")
+    ){
+
+        game.flags.dagger = true;
+
+        addItem({
+            id:"dagger",
+            name:"Kanlı Hançer",
+            icon:"🗡️",
+            type:"weapon",
+            quantity:1
+        });
+
+        addMessage(
+            "Kanlı hançeri eline aldığında metal kısa süreliğine ısınıyor. Üzerinde eski bir büyü hissediyorsun.",
+            "dm"
+        );
+
+        return;
+    }
+
+    if(
+        text.includes("konuş") ||
+        text.includes("insan") ||
+        text.includes("köylü")
+    ){
+
+        addMessage(
+            "Yaşlı bir köylü sana yaklaşır. “Gece yarısından sonra kuyunun yanına gitme,” diye fısıldar.",
+            "dm"
+        );
+
+        return;
+    }
+
+    if(
+        text.includes("ara") ||
+        text.includes("incele") ||
+        text.includes("bak")
+    ){
+
+        addMessage(
+            "Dikkatlice baktığında çevrede ayak izleri fark ediyorsun. İzler köy meydanından ormana doğru gidiyor.",
+            "dm"
+        );
+
+        return;
+    }
+
+    const generic = [
+
+        "Hamlen beklenmedik bir sonuç doğuruyor.",
+
+        "Çevredeki sessizlik bir anda bozuluyor.",
+
+        "İçgüdülerin bunun iyi bir fikir olmayabileceğini söylüyor.",
+
+        "Karanlıkta bir hareket görüyorsun. Bir şey seni izliyor.",
+
+        "Bir süre hiçbir şey olmuyor... sonra uzaktan metalik bir ses duyuluyor."
+
+    ];
+
+    addMessage(
+        generic[randomInt(generic.length)-1],
+        "dm"
+    );
+
+}
+
+
+/* =========================================================
+   PLAYER ACTION
+========================================================= */
+
+function sendAction(){
+
+    const input =
+        document.getElementById("input");
+
+    const text =
+        input.value.trim();
+
+    if(!text) return;
+
+    if(game.combat){
+
+        addMessage(
+            text,
+            "player"
+        );
+
+        input.value = "";
+
+        addMessage(
+            "⚔️ Savaş devam ediyor! Saldır, iksir kullan veya kaç.",
+            "combat"
+        );
+
+        return;
+    }
+
+    addMessage(
+        text,
+        "player"
+    );
+
+    input.value = "";
+
+    setTimeout(()=>{
+        dmResponse(text);
+        checkQuestProgress();
+        updateUI();
+    },350);
+
+}
+
+function quick(text){
+
+    document.getElementById("input").value =
+        text;
+
+    sendAction();
+
+}
+
+
+/* =========================================================
+   COMBAT
+========================================================= */
+
+const ENEMIES = [
+
+    {
+        name:"Goblin",
+        icon:"👺",
+        hp:8,
+        maxHp:8,
+        ac:12,
+        attack:3,
+        damage:[1,6],
+        xp:25
+    },
+
+    {
+        name:"Karanlık Kurt",
+        icon:"🐺",
+        hp:12,
+        maxHp:12,
+        ac:13,
+        attack:4,
+        damage:[1,6],
+        xp:40
+    },
+
+    {
+        name:"İskelet Savaşçı",
+        icon:"💀",
+        hp:18,
+        maxHp:18,
+        ac:14,
+        attack:4,
+        damage:[1,8],
+        xp:60
+    },
+
+    {
+        name:"Mağara Trolü",
+        icon:"👹",
+        hp:30,
+        maxHp:30,
+        ac:15,
+        attack:6,
+        damage:[1,10],
+        xp:100
+    }
+
+];
+
+
+function startCombat(enemyData=null){
+
+    if(game.combat){
+
+        toast("Zaten savaştasın.");
+
+        return;
+    }
+
+    const enemy =
+        clone(
+            enemyData ||
+            ENEMIES[randomInt(ENEMIES.length)-1]
+        );
+
+    game.combat = enemy;
+
+    addMessage(
+        `⚔️ <b>${enemy.name}</b> karşına çıkıyor!`,
+        "combat"
+    );
+
+    document
+        .getElementById("combatPanel")
+        .classList.add("active");
+
+    updateCombatUI();
+
+    enemyTurn();
+
+}
+
+function attackEnemy(){
+
+    if(!game.combat){
+
+        toast("Savaş yok.");
+
+        return;
+    }
+
+    const d20 =
+        randomInt(20);
+
+    const mod =
+        modifier(game.character.str);
+
+    const total =
+        d20 + mod;
+
+    addMessage(
+        `🎲 Saldırı atışı: ${d20} ${mod>=0?"+":""}${mod} = <b>${total}</b>`,
+        "player"
+    );
+
+    if(d20 === 20){
+
+        const damage =
+            rollDamage("1d8+3") * 2;
+
+        game.combat.hp -= damage;
+
+        addMessage(
+            `🌟 <b>KRİTİK VURUŞ!</b> ${damage} hasar.`,
+            "combat"
+        );
+
+    }else if(d20 === 1){
+
+        addMessage(
+            "💀 Saldırın ıskaladı ve dengen bozuldu.",
+            "combat"
+        );
+
+    }else if(total >= game.combat.ac){
+
+        const damage =
+            rollDamage("1d8+3");
+
+        game.combat.hp -= damage;
+
+        addMessage(
+            `⚔️ İsabet! ${damage} hasar verdin.`,
+            "combat"
+        );
+
+    }else{
+
+        addMessage(
+            "🛡️ Saldırın hedefin zırhına çarptı.",
+            "combat"
+        );
+
+    }
+
+    if(game.combat.hp <= 0){
+
+        winCombat();
+
+        return;
+    }
+
+    updateCombatUI();
+
+    setTimeout(enemyTurn,450);
+
+}
+
+
+function rollDamage(expression){
+
+    const match =
+        expression.match(/(\d+)d(\d+)([+-]\d+)?/);
+
+    if(!match) return 1;
+
+    const count =
+        Number(match[1]);
+
+    const sides =
+        Number(match[2]);
+
+    const bonus =
+        Number(match[3] || 0);
+
+    let total = bonus;
+
+    for(let i=0;i<count;i++){
+
+        total += randomInt(sides);
+
+    }
+
+    return Math.max(1,total);
+
+}
+
+
+function enemyTurn(){
+
+    if(!game.combat) return;
+
+    const enemy =
+        game.combat;
+
+    const d20 =
+        randomInt(20);
+
+    const total =
+        d20 + enemy.attack;
+
+    if(d20 === 20){
+
+        const damage =
+            rollDamage(
+                `2d${enemy.damage[1]}`
+            );
+
+        game.character.hp -= damage;
+
+        addMessage(
+            `💀 <b>${enemy.name} kritik vurdu!</b> ${damage} hasar aldın.`,
+            "combat"
+        );
+
+    }else if(total >= game.character.ac){
+
+        const damage =
+            rollDamage(
+                `1d${enemy.damage[1]}`
+            );
+
+        game.character.hp -= damage;
+
+        addMessage(
+            `${enemy.icon} ${enemy.name} sana ${damage} hasar verdi.`,
+            "combat"
+        );
+
+    }else{
+
+        addMessage(
+            `${enemy.icon} ${enemy.name} saldırdı ama ıskaladı.`,
+            "combat"
+        );
+
+    }
+
+    if(game.character.hp <= 0){
+
+        game.character.hp = 0;
+
+        addMessage(
+            "💀 <b>Yere düştün.</b> Macera burada sona ermedi; son kurtarma noktasına dönüyorsun.",
+            "combat"
+        );
+
+        setTimeout(()=>{
+            game.character.hp =
+                Math.ceil(game.character.maxHp/2);
+
+            game.combat = null;
+
+            document
+                .getElementById("combatPanel")
+                .classList.remove("active");
+
+            addMessage(
+                "✨ Şans eseri hayatta kaldın. HP'nin yarısı yenilendi.",
+                "dm"
+            );
+
+            updateUI();
+
+        },900);
+
+    }
+
+    updateCombatUI();
+    updateUI();
+
+}
+
+
+function winCombat(){
+
+    const enemy =
+        game.combat;
+
+    const xp =
+        enemy.xp;
+
+    addMessage(
+        `🏆 <b>${enemy.name}</b> yenildi! +${xp} XP kazandın.`,
+        "combat"
+    );
+
+    game.character.xp += xp;
+
+    if(randomInt(100) <= 35){
+
+        addItem({
+            id:"loot"+Date.now(),
+            name:"Düşman Ganimeti",
+            icon:"💰",
+            type:"misc",
+            quantity:1
+        });
+
+        game.character.gold +=
+            randomInt(15);
+
+        addMessage(
+            "💰 Düşmandan biraz altın buldun.",
+            "dm"
+        );
+
+    }
+
+    checkLevelUp();
+
+    game.combat = null;
+
+    document
+        .getElementById("combatPanel")
+        .classList.remove("active");
+
+    updateUI();
+
+}
+
+
+function fleeCombat(){
+
+    if(!game.combat) return;
+
+    const rollValue =
+        randomInt(20) +
+        modifier(game.character.dex);
+
+    if(rollValue >= 12){
+
+        addMessage(
+            "🏃 Başarıyla kaçtın.",
+            "dm"
+        );
+
+        game.combat = null;
+
+        document
+            .getElementById("combatPanel")
+            .classList.remove("active");
+
+    }else{
+
+        addMessage(
+            "❌ Kaçamadın!",
+            "combat"
+        );
+
+        enemyTurn();
+
+    }
+
+    updateUI();
+
+}
+
+
+function usePotion(){
+
+    const potion =
+        game.inventory.find(
+            x=>x.id==="potion" && x.quantity>0
+        );
+
+    if(!potion){
+
+        toast("Şifa iksirin yok.");
+
+        return;
+    }
+
+    if(
+        game.character.hp >=
+        game.character.maxHp
+    ){
+
+        toast("Canın zaten dolu.");
+
+        return;
+    }
+
+    const amount =
+        potion.heal;
+
+    game.character.hp =
+        Math.min(
+            game.character.maxHp,
+            game.character.hp + amount
+        );
+
+    potion.quantity--;
+
+    if(potion.quantity <= 0){
+
+        game.inventory =
+            game.inventory.filter(
+                x=>x!==potion
+            );
+
+    }
+
+    addMessage(
+        `🧪 Şifa iksirini kullandın. +${amount} HP.`,
+        "player"
+    );
+
+    if(game.combat){
+
+        setTimeout(enemyTurn,400);
+
+    }
+
+    updateUI();
+
+}
+
+
+function updateCombatUI(){
+
+    if(!game.combat) return;
+
+    const enemy =
+        game.combat;
+
+    document.getElementById("enemyName")
+        .textContent = enemy.name;
+
+    document.getElementById("enemyAvatar")
+        .textContent = enemy.icon;
+
+    document.getElementById("enemyHpText")
+        .textContent =
+        `${Math.max(0,enemy.hp)} / ${enemy.maxHp}`;
+
+    document.getElementById("enemyHpBar")
+        .style.width =
+        `${Math.max(0,enemy.hp)/enemy.maxHp*100}%`;
+
+}
+
+
+/* =========================================================
+   XP / LEVEL
+========================================================= */
+
+function xpNeeded(){
+
+    return game.character.level * 100;
+
+}
+
+function checkLevelUp(){
+
+    while(
+        game.character.xp >=
+        xpNeeded()
+    ){
+
+        game.character.xp -=
+            xpNeeded();
+
+        game.character.level++;
+
+        game.character.maxHp +=
+            5;
+
+        game.character.hp =
+            game.character.maxHp;
+
+        game.character.str++;
+
+        addMessage(
+            `🌟 <b>SEVİYE ATLADIN!</b> Artık Seviye ${game.character.level}. Maksimum HP +5, Güç +1.`,
+            "dm"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   INVENTORY
+========================================================= */
+
+function addItem(item){
+
+    const existing =
+        game.inventory.find(
+            x=>x.id===item.id
+        );
+
+    if(existing){
+
+        existing.quantity +=
+            item.quantity || 1;
+
+    }else{
+
+        game.inventory.push(item);
+
+    }
+
+}
+
+
+function renderInventory(){
+
+    const container =
+        document.getElementById("inventory");
+
+    container.innerHTML = "";
+
+    if(game.inventory.length===0){
+
+        container.innerHTML =
+            `<span class="muted">Çanta boş.</span>`;
+
+        return;
+    }
+
+    game.inventory.forEach(item=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className="item";
+
+        div.innerHTML =
+            `<span>
+                ${item.icon || "📦"}
+                ${item.name}
+                ×${item.quantity}
+            </span>
+            ${
+                item.id==="potion"
+                ? `<button onclick="usePotion()">Kullan</button>`
+                : ""
+            }`;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   QUESTS
+========================================================= */
+
+function checkQuestProgress(){
+
+    const q1 =
+        game.quests.find(
+            q=>q.id==="blackmoor"
+        );
+
+    if(
+        game.flags.well &&
+        !q1.done
+    ){
+
+        completeQuest(q1);
+
+    }
+
+    const q2 =
+        game.quests.find(
+            q=>q.id==="church"
+        );
+
+    if(
+        game.flags.church &&
+        !q2.done
+    ){
+
+        completeQuest(q2);
+
+    }
+
+}
+
+
+function completeQuest(q){
+
+    q.done = true;
+
+    game.character.xp +=
+        q.reward;
+
+    addMessage(
+        `📜 <b>Görev tamamlandı:</b> ${q.title}<br>+${q.reward} XP`,
+        "dm"
+    );
+
+    checkLevelUp();
+
+}
+
+
+function renderQuests(){
+
+    const container =
+        document.getElementById("quests");
+
+    container.innerHTML = "";
+
+    game.quests.forEach(q=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            `quest ${q.done?"done":""}`;
+
+        div.innerHTML =
+            `<b>${q.done?"✓":"•"} ${q.title}</b>
+             <br>
+             <span class="muted">
+                ${q.description}
+             </span>`;
+
+        container.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================================
+   CHARACTER
+========================================================= */
+
+function openCharacter(){
+
+    document
+        .getElementById("characterModal")
+        .classList.add("show");
+
+}
+
+function closeCharacter(){
+
+    document
+        .getElementById("characterModal")
+        .classList.remove("show");
+
+}
+
+function createCharacter(){
+
+    const name =
+        document.getElementById("nameInput")
+            .value.trim();
+
+    const className =
+        document.getElementById("classInput")
+            .value;
+
+    const race =
+        document.getElementById("raceInput")
+            .value;
+
+    const background =
+        document.getElementById("backgroundInput")
+            .value;
+
+    if(!name){
+
+        toast("Bir isim seçmelisin.");
+
+        return;
+    }
+
+    game.character.name =
+        name;
+
+    game.character.className =
+        className;
+
+    game.character.race =
+        race;
+
+    game.character.background =
+        background;
+
+    applyClass(className);
+
+    closeCharacter();
+
+    addMessage(
+        `🧙 Yeni karakter hazır: <b>${name}</b>, ${race} ${className}.`,
+        "dm"
+    );
+
+    updateUI();
+
+}
+
+
+function applyClass(className){
+
+    const c =
+        game.character;
+
+    if(className==="Savaşçı"){
+
+        c.maxHp=20;
+        c.hp=20;
+        c.ac=14;
+        c.str=16;
+        c.dex=12;
+        c.con=15;
+        c.int=10;
+        c.wis=11;
+        c.cha=10;
+
+    }
+
+    if(className==="Büyücü"){
+
+        c.maxHp=14;
+        c.hp=14;
+        c.ac=11;
+        c.str=8;
+        c.dex=12;
+        c.con=12;
+        c.int=17;
+        c.wis=14;
+        c.cha=12;
+
+    }
+
+    if(className==="Hırsız"){
+
+        c.maxHp=16;
+        c.hp=16;
+        c.ac=15;
+        c.str=10;
+        c.dex=17;
+        c.con=12;
+        c.int=13;
+        c.wis=11;
+        c.cha=14;
+
+    }
+
+    if(className==="Paladin"){
+
+        c.maxHp=20;
+        c.hp=20;
+        c.ac=16;
+        c.str=15;
+        c.dex=10;
+        c.con=15;
+        c.int=10;
+        c.wis=12;
+        c.cha=16;
+
+    }
+
+    if(className==="Korucu"){
+
+        c.maxHp=18;
+        c.hp=18;
+        c.ac=14;
+        c.str=12;
+        c.dex=16;
+        c.con=13;
+        c.int=11;
+        c.wis=14;
+        c.cha=10;
+
+    }
+
+}
+
+
+/* =========================================================
+   UI
+========================================================= */
+
+function updateUI(){
+
+    const c =
+        game.character;
+
+    document.getElementById("characterName")
+        .textContent = c.name;
+
+    document.getElementById("level")
+        .textContent = c.level;
+
+    document.getElementById("className")
+        .textContent = c.className;
+
+    document.getElementById("hpText")
+        .textContent =
+        `${c.hp} / ${c.maxHp}`;
+
+    document.getElementById("hpBar")
+        .style.width =
+        `${Math.max(0,c.hp)/c.maxHp*100}%`;
+
+    document.getElementById("xpText")
+        .textContent =
+        `${c.xp} / ${xpNeeded()}`;
+
+    document.getElementById("xpBar")
+        .style.width =
+        `${Math.min(100,c.xp/xpNeeded()*100)}%`;
+
+    document.getElementById("ac")
+        .textContent = c.ac;
+
+    document.getElementById("attack")
+        .textContent =
+        `+${modifier(c.str)+3}`;
+
+    document.getElementById("damage")
+        .textContent =
+        "1d8+" + modifier(c.str);
+
+    document.getElementById("gold")
+        .textContent = c.gold;
+
+    ["str","dex","con","int","wis","cha"]
+        .forEach(key=>{
+            document.getElementById(key)
+                .textContent = c[key];
+        });
+
+    document.getElementById("location")
+        .textContent = game.location;
+
+    document.getElementById("weather")
+        .textContent = game.weather;
+
+    renderInventory();
+
+    renderQuests();
+
+    updateCombatUI();
+
+}
+
+
+/* =========================================================
+   BOOK
+========================================================= */
+
+function openBook(){
+
+    document
+        .getElementById("bookModal")
+        .classList.add("show");
+
+    bookTab("how");
+
+}
+
+function closeBook(){
+
+    document
+        .getElementById("bookModal")
+        .classList.remove("show");
+
+}
+
+
+function bookTab(tab){
+
+    const content =
+        document.getElementById("bookContent");
+
+    document
+        .querySelectorAll(".tab")
+        .forEach(x=>x.classList.remove("active"));
+
+    const buttons =
+        document.querySelectorAll(".tab");
+
+    if(tab==="how"){
+
+        buttons[0].classList.add("active");
+
+        content.innerHTML = `
+
+<h2>📖 Realm of Shadows</h2>
+
+<h3>Oyunun amacı</h3>
+
+<p>
+Sen bu dünyanın kahramanısın. Dungeon Master çevreyi,
+NPC'leri, tehlikeleri ve sonuçları yönetir.
+Sen ise karakterinin ne yaptığını söylersin.
+</p>
+
+<h3>Nasıl oynanır?</h3>
+
+<ol>
+<li>Karakterini oluştur.</li>
+<li>Hikâyeyi oku.</li>
+<li>Ne yapmak istediğini yaz.</li>
+<li>Gerektiğinde zar at.</li>
+<li>Sonuçlara göre hikâye ilerler.</li>
+<li>Savaş başladığında savaş panelini kullan.</li>
+</ol>
+
+<h3>Örnek</h3>
+
+<p>
+<b>Oyuncu:</b>
+“Kuyunun içine bakıp aşağıda ne olduğunu anlamaya çalışıyorum.”
+</p>
+
+<p>
+DM bunun için bir Bilgelik veya Zeka kontrolü isteyebilir.
+</p>
+
+<h3>Temel mantık</h3>
+
+<p>
+Sen <b>ne yapmak istediğini</b> söylersin.
+Sistem veya DM, bunun başarılı olup olmadığını belirlemek
+için zar ve karakter özelliklerini kullanır.
+</p>
+
+`;
+
+    }
+
+    if(tab==="rules"){
+
+        buttons[1].classList.add("active");
+
+        content.innerHTML = `
+
+<h2>⚔️ Temel Kurallar</h2>
+
+<h3>D20 sistemi</h3>
+
+<p>
+Çoğu önemli eylem için D20 atılır.
+Sonuca karakterinin ilgili özellik modifiyesi eklenir.
+</p>
+
+<p>
+<b>Toplam = D20 + özellik modifiyesi</b>
+</p>
+
+<h3>Zorluklar</h3>
+
+<ul>
+<li>10 — Kolay</li>
+<li>12 — Normal</li>
+<li>15 — Zor</li>
+<li>18 — Çok zor</li>
+<li>20+ — Kahramanca</li>
+</ul>
+
+<h3>Kritik sonuçlar</h3>
+
+<p>
+D20'de 20 doğal sonuç → kritik başarı.
+</p>
+
+<p>
+D20'de 1 doğal sonuç → kritik başarısızlık.
+</p>
+
+<h3>Özellik modifiyesi</h3>
+
+<p>
+<b>Mod = aşağı yuvarla((Özellik - 10) / 2)</b>
+</p>
+
+<h3>Önemli not</h3>
+
+<p>
+Bu oyun motoru kendi sadeleştirilmiş RPG kurallarını kullanır.
+Resmî D&D kurallarının birebir dijital uygulaması değildir.
+</p>
+
+`;
+
+    }
+
+    if(tab==="combat"){
+
+        buttons[2].classList.add("active");
+
+        content.innerHTML = `
+
+<h2>⚔️ Savaş Sistemi</h2>
+
+<ol>
+<li>Savaş başlar.</li>
+<li>Sen saldırırsın.</li>
+<li>D20 + saldırı bonusu hesaplanır.</li>
+<li>Sonuç düşmanın AC değerine eşit veya büyükse vurursun.</li>
+<li>Hasar atılır.</li>
+<li>Düşman karşı saldırı yapar.</li>
+</ol>
+
+<h3>Kritik vuruş</h3>
+
+<p>
+Doğal 20 iki kat hasar verir.
+</p>
+
+<h3>İksir</h3>
+
+<p>
+Şifa iksiri HP yeniler.
+Savaş sırasında kullanabilirsin.
+</p>
+
+<h3>Kaçmak</h3>
+
+<p>
+Kaçış için D20 + Çeviklik modifiyesi kullanılır.
+12 veya üzeri başarıdır.
+</p>
+
+`;
+
+    }
+
+    if(tab==="stats"){
+
+        buttons[3].classList.add("active");
+
+        content.innerHTML = `
+
+<h2>📊 Karakter Özellikleri</h2>
+
+<ul>
+<li><b>STR — Güç:</b> fiziksel kuvvet.</li>
+<li><b>DEX — Çeviklik:</b> hız, refleks ve gizlilik.</li>
+<li><b>CON — Dayanıklılık:</b> sağlık ve direnç.</li>
+<li><b>INT — Zeka:</b> bilgi ve büyü bilgisi.</li>
+<li><b>WIS — Bilgelik:</b> sezgi ve algı.</li>
+<li><b>CHA — Karizma:</b> ikna ve sosyal etki.</li>
+</ul>
+
+<h3>AC</h3>
+
+<p>
+Armor Class. Düşmanın seni vurabilmesi için ulaşması
+gereken savunma değeridir.
+</p>
+
+<h3>XP</h3>
+
+<p>
+Düşmanları yenmek ve görevleri tamamlamak deneyim kazandırır.
+Yeterli XP topladığında seviye atlarsın.
+</p>
+
+`;
+
+    }
+
+}
+
+
+/* =========================================================
+   SAVE / IMPORT / EXPORT
+========================================================= */
+
+function exportSave(){
+
+    const data =
+        JSON.stringify(game,null,2);
+
+    const blob =
+        new Blob(
+            [data],
+            {type:"application/json"}
+        );
+
+    const url =
+        URL.createObjectURL(blob);
+
+    const a =
+        document.createElement("a");
+
+    a.href=url;
+
+    a.download =
+        `${game.character.name}-realm-save.json`;
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+    toast("⬇️ Kayıt indirildi.");
+
+}
+
+
+function importSave(){
+
+    const input =
+        document.createElement("input");
+
+    input.type="file";
+
+    input.accept=".json";
+
+    input.onchange = e=>{
+
+        const file =
+            e.target.files[0];
+
+        if(!file) return;
+
+        const reader =
+            new FileReader();
+
+        reader.onload = event=>{
+
+            try{
+
+                game =
+                    JSON.parse(event.target.result);
+
+                updateUI();
+
+                addMessage(
+                    "📥 Kayıt dosyası başarıyla yüklendi.",
+                    "system"
+                );
+
+            }catch(err){
+
+                alert("Geçersiz kayıt dosyası.");
+
+            }
+
+        };
+
+        reader.readAsText(file);
+
+    };
+
+    input.click();
+
+}
+
+
+/* =========================================================
+   NEW GAME
+========================================================= */
+
+function newGame(){
+
+    if(
+        !confirm(
+            "Yeni oyun başlatılsın mı? Mevcut ilerleme kaybolabilir."
+        )
+    ) return;
+
+    game =
+        clone(DEFAULT_GAME);
+
+    document.getElementById("story")
+        .innerHTML = "";
+
+    intro();
+
+    updateUI();
+
+    save();
+
+}
+
+
+function intro(){
+
+    addMessage(
+        `
+        Yağmur, Blackmoor Köyü'nün taş sokaklarını dövüyor.
+        <br><br>
+        Köyün ortasındaki eski kuyudan bir fısıltı yükseliyor.
+        <br><br>
+        <i>“Beni bul...”</i>
+        <br><br>
+        Tam o sırada terk edilmiş kilisenin kapısı kendi kendine kapanıyor.
+        <br><br>
+        <b>Macera başlıyor.</b>
+        `,
+        "dm"
+    );
+
+    addMessage(
+        "Ne yapmak istiyorsun?",
+        "dm"
+    );
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document
+.addEventListener("keydown",e=>{
+
+    if(e.key==="Escape"){
+
+        document
+            .querySelectorAll(".modal")
+            .forEach(m=>
+                m.classList.remove("show")
+            );
+
+    }
+
+    if(e.ctrlKey && e.key.toLowerCase()==="s"){
+
+        e.preventDefault();
+
+        save();
+
+    }
+
+    if(
+        e.key.toLowerCase()==="r" &&
+        document.activeElement.tagName !== "TEXTAREA" &&
+        document.activeElement.tagName !== "INPUT"
+    ){
+
+        roll(20);
+
+    }
+
+});
+
+
+document
+.getElementById("input")
+.addEventListener("keydown",e=>{
+
+    if(
+        e.key==="Enter" &&
+        !e.shiftKey
+    ){
+
+        e.preventDefault();
+
+        sendAction();
+
+    }
+
+});
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+load();
+
+updateUI();
+
+if(!game.journal || game.journal.length===0){
+
+    intro();
+
+}else{
+
+    game.journal
+        .slice(-50)
+        .forEach(entry=>{
+
+            addMessage(
+                entry.text,
+                entry.type
+            );
+
+        });
+
+}
+
+</script>
+
+</body>
+</html>
